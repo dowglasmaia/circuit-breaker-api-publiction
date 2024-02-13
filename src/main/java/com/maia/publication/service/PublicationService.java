@@ -2,7 +2,7 @@ package com.maia.publication.service;
 
 import com.maia.publication.domain.Publication;
 import com.maia.publication.repository.PublicationRepository;
-import com.maia.publication.service.mapper.PublicationMapper;
+import com.maia.publication.mapper.PublicationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

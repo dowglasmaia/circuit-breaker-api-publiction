@@ -1,5 +1,6 @@
-package com.maia.publication.service.mapper;
+package com.maia.publication.mapper;
 
+import com.maia.publication.controller.request.PublicationRequest;
 import com.maia.publication.domain.Publication;
 import com.maia.publication.repository.entity.PublicationEntity;
 import org.mapstruct.Mapper;
@@ -10,4 +11,6 @@ public interface PublicationMapper {
     PublicationEntity toPublicationEntity(Publication publication);
 
     Publication toPublication(PublicationEntity publicationEntity);
+
+    Publication toPublication(PublicationRequest publicationRequest);
 }
