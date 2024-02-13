@@ -27,13 +27,14 @@ public class PublicationController {
         publicationService.insert(publication);
     }
 
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Publication> findAll() {
         return publicationService.findAll();
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Publication findById(@PathVariable String id) {
         return publicationService.findById(id);
