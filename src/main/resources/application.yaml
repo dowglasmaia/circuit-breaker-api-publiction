@@ -3,8 +3,19 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      authentication-database: admin
-      username: root
-      password: example
+      #authentication-database: admin
+      #username: root
+      #password: example
       database: circuit-breaker
+
+client:
+  comments:
+    url: http://localhost:8082
+
+resilience4J.circuitbreaker:
+  instances:
+    comments:
+      slidingWindowSize: 8
+      minimumNumberOfCalls: 4
+
 

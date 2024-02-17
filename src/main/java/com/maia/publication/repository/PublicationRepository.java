@@ -1,6 +1,6 @@
 package com.maia.publication.repository;
 
-import com.maia.publication.repository.entity.PublicationEntity;
+import com.maia.publication.entity.PublicationEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

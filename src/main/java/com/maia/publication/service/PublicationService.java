@@ -1,21 +1,22 @@
 package com.maia.publication.service;
 
+import com.maia.publication.client.CommentClient;
 import com.maia.publication.domain.Publication;
-import com.maia.publication.repository.PublicationRepository;
 import com.maia.publication.mapper.PublicationMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.maia.publication.repository.PublicationRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PublicationService {
 
-    @Autowired
-    private PublicationRepository repository;
-
-    @Autowired
-    private PublicationMapper publicationMapper;
+    private final PublicationRepository repository;
+    private final PublicationMapper publicationMapper;
+    private final CommentClient commentClient;
 
     public void insert(Publication publication) {
         var publicationEntity = publicationMapper.toPublicationEntity(publication);
@@ -27,9 +28,16 @@ public class PublicationService {
         return publications.stream().map(publicationMapper::toPublication).toList();
     }
 
+    @CircuitBreaker(name = "comments")
     public Publication findById(String id) {
-        return repository.findById(id)
+        Publication publication = repository.findById(id)
                 .map(publicationMapper::toPublication)
                 .orElseThrow(RuntimeException::new);
+
+        var comments = commentClient.getComments(id);
+
+        publication.setComments(comments);
+
+        return publication;
     }
 }
