@@ -12,12 +12,18 @@ client:
   comments:
     url: http://localhost:8082
 
+management.health.circuitbreakers.enabled: true
+management.health.ratelimiters.enabled: true
+
 resilience4J.circuitbreaker:
   instances:
     comments:
       slidingWindowSize: 8
-      minimumNumberOfCalls: 4
-      permittedNumberOfCallsInHalfOpenState: 2
-      waitDurationInOpenState: 30s
+      slowCallDurationThreshold: 2000               # controla o circuit por tempo de response
+      slowCallRateThreshold: 10                     # limita de taxa das chamadas lentas  %
+      #minimumNumberOfCalls: 4                      # controla o circuit pelo numero de chamadas com falhas
+      #permittedNumberOfCallsInHalfOpenState: 2     # quantidade de chamadas para mudar do semi aberto para o aberto
+      #waitDurationInOpenState: 30s                 # tempo de duração que o circuito fica aberto
+
 
 
