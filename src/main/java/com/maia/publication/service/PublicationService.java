@@ -2,14 +2,17 @@ package com.maia.publication.service;
 
 import com.maia.publication.client.CommentClient;
 import com.maia.publication.domain.Publication;
+import com.maia.publication.exceptions.FallbackException;
 import com.maia.publication.mapper.PublicationMapper;
 import com.maia.publication.repository.PublicationRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PublicationService {
@@ -28,7 +31,7 @@ public class PublicationService {
         return publications.stream().map(publicationMapper::toPublication).toList();
     }
 
-    @CircuitBreaker(name = "comments")
+    @CircuitBreaker(name = "comments", fallbackMethod = "findByIdFallback")
     public Publication findById(String id) {
         Publication publication = repository.findById(id)
                 .map(publicationMapper::toPublication)
@@ -39,5 +42,10 @@ public class PublicationService {
         publication.setComments(comments);
 
         return publication;
+    }
+
+    private Publication findByIdFallback(String id, Throwable cause) {
+        log.warn("[WARN] Fallback with id {}", id);
+        throw new FallbackException(cause);
     }
 }
